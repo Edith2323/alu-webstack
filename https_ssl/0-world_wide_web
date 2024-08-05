@@ -1,5 +1,5 @@
-#!/bin/env bash
-# Function to process a single subdomain
+ #!/usr/bin/env bash
+ # Function to process a single subdomain
 process_subdomain() {
     local subdomain="$1"
     local domain="$2"
