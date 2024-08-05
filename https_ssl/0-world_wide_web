@@ -34,4 +34,3 @@ else
     # Process specified subdomain
     process_subdomain "$subdomain" "$domain"
 fi
-
