@@ -1,0 +1,38 @@
+#!/bin/bash
+
+# Function to process a single subdomain
+process_subdomain() {
+    local subdomain="$1"
+    local domain="$2"
+    local record_type="A"  # Assuming A records
+
+    # Use awk to extract IP address based on subdomain and domain
+    ip_address=$(awk -v subdomain="$subdomain" -v domain="$domain" '$3 ~ subdomain "." domain {print $4}' <(cat image.txt))
+
+    if [[ ! -z "$ip_address" ]]; then
+        echo "The subdomain $subdomain is a $record_type record and points to $ip_address"
+    else
+        echo "Subdomain $subdomain not found for domain $domain"
+    fi
+}
+
+# Main script logic
+domain="$1"
+subdomain="$2"
+
+if [[ -z "$domain" ]]; then
+    echo "Domain is required"
+    exit 1
+fi
+
+if [[ -z "$subdomain" ]]; then
+    # Process default subdomains
+    subdomains=("www" "lb-01" "web-01" "web-02")
+    for subdomain in "${subdomains[@]}"; do
+        process_subdomain "$subdomain" "$domain"
+    done
+else
+    # Process specified subdomain
+    process_subdomain "$subdomain" "$domain"
+fi
+
